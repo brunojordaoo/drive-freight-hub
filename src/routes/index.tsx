@@ -73,7 +73,7 @@ const cadastroSchema = z.object({
   }),
 });
 
-type Erros = Partial<Record<string, string>>;
+type Erros = Record<string, string | undefined>;
 
 function Portal() {
   // db.from('veiculos').select()
@@ -426,7 +426,7 @@ function Campo({
   children,
 }: {
   label: string;
-  erro?: string;
+  erro?: string | undefined;
   children: React.ReactNode;
 }) {
   return (
