@@ -34,11 +34,14 @@ export interface Motorista {
   criado_em: string;
 }
 
+export type TipoVeiculo = "furgao" | "van";
+
 export interface Veiculo {
   id: string;
   modelo: string;
   placa: string;
   ano: number;
+  tipo: TipoVeiculo;
   km_atual: number;
   km_ultima_revisao: number;
   valor_semanal: number;
@@ -153,9 +156,10 @@ const seed: DbShape = {
       modelo: "Peugeot Partner 1.6",
       placa: "QWA-7C31",
       ano: 2022,
+      tipo: "van",
       km_atual: 74210,
       km_ultima_revisao: 68000,
-      valor_semanal: 690,
+      valor_semanal: 1000,
       status: "alugado",
       rastreador_bloqueado: false,
     },
@@ -164,9 +168,10 @@ const seed: DbShape = {
       modelo: "Fiat Fiorino Endurance",
       placa: "PJB-4D08",
       ano: 2023,
+      tipo: "furgao",
       km_atual: 41880,
       km_ultima_revisao: 40000,
-      valor_semanal: 620,
+      valor_semanal: 800,
       status: "alugado",
       rastreador_bloqueado: false,
     },
@@ -175,9 +180,10 @@ const seed: DbShape = {
       modelo: "Renault Master Furgão",
       placa: "RTF-9G55",
       ano: 2021,
+      tipo: "furgao",
       km_atual: 118430,
       km_ultima_revisao: 112000,
-      valor_semanal: 940,
+      valor_semanal: 800,
       status: "disponivel",
       rastreador_bloqueado: false,
     },
@@ -186,9 +192,10 @@ const seed: DbShape = {
       modelo: "Fiat Ducato Cargo",
       placa: "SAB-2H19",
       ano: 2024,
+      tipo: "van",
       km_atual: 22105,
       km_ultima_revisao: 20000,
-      valor_semanal: 1020,
+      valor_semanal: 1000,
       status: "manutencao",
       rastreador_bloqueado: false,
     },
@@ -199,8 +206,8 @@ const seed: DbShape = {
       motorista_id: "mot-1",
       veiculo_id: "vei-1",
       inicio: "2026-06-08",
-      valor_semanal: 690,
-      caucao: 900,
+      valor_semanal: 1000,
+      caucao: 2500,
       status: "ativo",
     },
     {
@@ -208,19 +215,19 @@ const seed: DbShape = {
       motorista_id: "mot-2",
       veiculo_id: "vei-2",
       inicio: "2026-08-31",
-      valor_semanal: 620,
-      caucao: 900,
+      valor_semanal: 800,
+      caucao: 1700,
       status: "ativo",
     },
   ],
   pagamentos: [
-    pgto("pag-1", "alu-1", "Semana 30/06", "2026-07-06", 690, "pago"),
-    pgto("pag-2", "alu-1", "Semana 07/07", "2026-07-13", 690, "pago"),
-    pgto("pag-3", "alu-1", "Semana 14/07", "2026-07-20", 690, "pago"),
-    pgto("pag-4", "alu-1", "Semana 24/08", "2026-08-31", 690, "pago"),
-    pgto("pag-5", "alu-1", "Semana 31/08", "2026-09-04", 690, "atrasado"),
-    pgto("pag-6", "alu-1", "Semana 07/09", "2026-09-11", 690, "pendente"),
-    pgto("pag-7", "alu-2", "Semana 31/08", "2026-09-06", 620, "pendente"),
+    pgto("pag-1", "alu-1", "Semana 30/06", "2026-07-06", 1000, "pago"),
+    pgto("pag-2", "alu-1", "Semana 07/07", "2026-07-13", 1000, "pago"),
+    pgto("pag-3", "alu-1", "Semana 14/07", "2026-07-20", 1000, "pago"),
+    pgto("pag-4", "alu-1", "Semana 24/08", "2026-08-31", 1000, "pago"),
+    pgto("pag-5", "alu-1", "Semana 31/08", "2026-09-04", 1000, "atrasado"),
+    pgto("pag-6", "alu-1", "Semana 07/09", "2026-09-11", 1000, "pendente"),
+    pgto("pag-7", "alu-2", "Semana 31/08", "2026-09-06", 800, "pendente"),
   ],
   vistorias: [
     {
@@ -339,6 +346,12 @@ export const dataBR = (iso: string) => {
 
 /** Fundo de depreciação: R$ 0,20 por km rodado */
 export const fundoDepreciacao = (km: number) => km * 0.2;
+
+/** Semanal: furgão R$ 800 · van R$ 1.000 */
+export const semanalDe = (tipo: TipoVeiculo) => (tipo === "furgao" ? 800 : 1000);
+
+/** Caução: furgão R$ 1.700 · van R$ 2.500 */
+export const caucaoDe = (tipo: TipoVeiculo) => (tipo === "furgao" ? 1700 : 2500);
 
 /** Manutenção obrigatória a cada 10.000 km */
 export const precisaManutencao = (km: number, kmUltimaRevisao: number) =>

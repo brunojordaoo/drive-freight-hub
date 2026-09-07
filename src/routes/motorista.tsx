@@ -134,7 +134,8 @@ function AreaMotorista() {
         <div className="flex items-start gap-3 rounded-2xl border border-warning/50 bg-warning/10 p-4">
           <CalendarClock className="mt-0.5 size-5 shrink-0 text-warning" />
           <p className="text-sm">
-            Próxima parcela de {brl(emAberto[0].valor)} vence em {dataBR(emAberto[0].vencimento)}.
+            Próxima parcela de {brl(emAberto[0]!.valor)} vence em{" "}
+            {dataBR(emAberto[0]!.vencimento)}.
           </p>
         </div>
       ) : (

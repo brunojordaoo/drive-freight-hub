@@ -120,6 +120,16 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div
+          className="aurora-blob-a absolute left-0 top-0 h-[55vh] w-[55vw] rounded-full blur-3xl"
+          style={{ background: "radial-gradient(closest-side, oklch(0.78 0.15 175 / 0.16), transparent)" }}
+        />
+        <div
+          className="aurora-blob-b absolute right-0 top-0 h-[60vh] w-[60vw] rounded-full blur-3xl"
+          style={{ background: "radial-gradient(closest-side, oklch(0.74 0.15 155 / 0.13), transparent)" }}
+        />
+      </div>
       <SiteHeader />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
