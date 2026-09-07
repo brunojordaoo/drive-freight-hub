@@ -12,6 +12,7 @@ import {
   QrCode,
   ShieldCheck,
   Timer,
+  UploadCloud,
   Wrench,
 } from "lucide-react";
 
@@ -25,6 +26,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   db,
   brl,
+  caucaoDe,
   idadeEm,
   maskCNPJ,
   maskCPF,
@@ -53,8 +55,6 @@ export const Route = createFileRoute("/")({
   component: Portal,
 });
 
-const CAUCAO = 900;
-
 const cadastroSchema = z.object({
   nome: z.string().trim().min(5, "Informe o nome completo").max(100),
   email: z.string().trim().email("E-mail inválido").max(255),
@@ -68,6 +68,9 @@ const cadastroSchema = z.object({
   cnh: z.string().refine((v) => v.replace(/\D/g, "").length === 11, "CNH deve ter 11 dígitos"),
   tem_ear: z.literal(true, { errorMap: () => ({ message: "A CNH precisa ter a observação EAR" }) }),
   cidade: z.string().trim().min(3, "Informe a cidade"),
+  comprovante_residencia: z.literal(true, {
+    errorMap: () => ({ message: "Anexe o comprovante de residência (frente)" }),
+  }),
 });
 
 type Erros = Partial<Record<string, string>>;
@@ -88,6 +91,7 @@ function Portal() {
     cnh: "",
     tem_ear: false,
     cidade: "Itabuna",
+    comprovante_residencia: false,
   });
   const [pedido, setPedido] = useState<{ motoristaId: string; veiculo: Veiculo } | null>(null);
 
@@ -153,7 +157,8 @@ function Portal() {
             </a>
           </Button>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <ShieldCheck className="size-4 text-primary" /> Caução de {brl(CAUCAO)} via Pix
+            <ShieldCheck className="size-4 text-primary" /> Caução de {brl(1700)} a {brl(2500)} via
+            Pix
           </div>
         </div>
 
@@ -241,6 +246,9 @@ function Portal() {
                         <p className="mt-3 text-lg font-semibold text-primary">
                           {brl(v.valor_semanal)}
                           <span className="text-xs font-normal text-muted-foreground">/semana</span>
+                        </p>
+                        <p className="text-[11px] text-muted-foreground">
+                          {v.tipo === "furgao" ? "Furgão" : "Van"} · caução {brl(caucaoDe(v.tipo))}
                         </p>
                       </button>
                     ))}
@@ -339,6 +347,37 @@ function Portal() {
                     />
                   </div>
 
+                  <button
+                    type="button"
+                    onClick={() => set("comprovante_residencia", !form.comprovante_residencia)}
+                    className={`flex w-full items-center gap-3 rounded-2xl border border-dashed p-4 text-left transition-colors ${
+                      form.comprovante_residencia
+                        ? "border-primary bg-primary/10"
+                        : "border-border hover:border-primary/50"
+                    }`}
+                  >
+                    {form.comprovante_residencia ? (
+                      <CheckCircle2 className="size-6 shrink-0 text-primary" />
+                    ) : (
+                      <UploadCloud className="size-6 shrink-0 text-muted-foreground" />
+                    )}
+                    <span>
+                      <span className="block text-sm font-medium">
+                        {form.comprovante_residencia
+                          ? "Comprovante de residência anexado"
+                          : "Anexar comprovante de residência (frente)"}
+                      </span>
+                      <span className="block text-xs text-muted-foreground">
+                        Conta de luz, água ou telefone recente em seu nome.
+                      </span>
+                      {erros.comprovante_residencia && (
+                        <span className="mt-1 block text-xs text-destructive">
+                          {erros.comprovante_residencia}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+
                   <div className="flex gap-3">
                     <Button variant="secondary" className="flex-1" onClick={() => setPasso(1)}>
                       Voltar
@@ -360,7 +399,8 @@ function Portal() {
                     <Separator className="my-3" />
                     <Linha rot="Veículo" val={`${selecionado.modelo} · ${selecionado.placa}`} />
                     <Linha rot="Semanal" val={brl(selecionado.valor_semanal)} />
-                    <Linha rot="Caução (Pix)" val={brl(CAUCAO)} />
+                    <Linha rot="Caução (Pix)" val={brl(caucaoDe(selecionado.tipo))} />
+                    <Linha rot="Documentos" val="CNH + comprovante de residência anexados" />
                   </div>
                   <div className="flex gap-3">
                     <Button variant="secondary" className="flex-1" onClick={() => setPasso(2)}>
