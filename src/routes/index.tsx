@@ -463,7 +463,8 @@ function Checkout({ veiculo, onNovo }: { veiculo: Veiculo; onNovo: () => void })
     [segundos],
   );
 
-  const codigo = `00020126VANTURACAUCAO${veiculo.placa.replace("-", "")}52040000530398654${CAUCAO}5802BR5913VANTURA FROTA6008ITABUNA6304A1B2`;
+  const caucao = caucaoDe(veiculo.tipo);
+  const codigo = `00020126VANTURACAUCAO${veiculo.placa.replace("-", "")}52040000530398654${caucao}5802BR5913VANTURA FROTA6008ITABUNA6304A1B2`;
 
   return (
     <Card className="border-primary/40">
@@ -501,7 +502,7 @@ function Checkout({ veiculo, onNovo }: { veiculo: Veiculo; onNovo: () => void })
 
             <div className="text-center">
               <p className="text-xs text-muted-foreground">Caução do {veiculo.modelo}</p>
-              <p className="text-3xl font-semibold text-primary">{brl(CAUCAO)}</p>
+              <p className="text-3xl font-semibold text-primary">{brl(caucao)}</p>
             </div>
 
             <p className="break-all rounded-xl bg-secondary/60 p-3 text-[11px] text-muted-foreground">
