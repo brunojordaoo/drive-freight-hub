@@ -189,6 +189,7 @@ function PainelAdmin() {
             <TableHeader>
               <TableRow>
                 <TableHead>Veículo</TableHead>
+                <TableHead>Locatário</TableHead>
                 <TableHead>Tipo</TableHead>
                 <TableHead>Semanal</TableHead>
                 <TableHead>Caução</TableHead>
