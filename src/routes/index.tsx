@@ -25,6 +25,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import {
   db,
+  DOCS_PADRAO,
   brl,
   caucaoDe,
   idadeEm,
