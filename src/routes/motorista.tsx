@@ -64,6 +64,7 @@ function AreaMotorista() {
   const ultimaVistoria = minhasVistorias[minhasVistorias.length - 1];
 
   const [km, setKm] = useState("");
+  const [kmDia, setKmDia] = useState("");
   const [obs, setObs] = useState("");
   const [fotos, setFotos] = useState<string[]>([]);
 
