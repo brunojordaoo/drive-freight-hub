@@ -32,7 +32,23 @@ export interface Motorista {
   cidade: string;
   status: StatusMotorista;
   criado_em: string;
+  /** Documentos enviados no cadastro */
+  documentos: DocumentoMotorista[];
+  /** Observações internas da operação */
+  observacoes_admin: string;
 }
+
+export interface DocumentoMotorista {
+  tipo: string;
+  arquivo: string;
+  verificado: boolean;
+}
+
+export const DOCS_PADRAO = (n: string): DocumentoMotorista[] => [
+  { tipo: "CNH (frente)", arquivo: `cnh-${n}.jpg`, verificado: false },
+  { tipo: "Cartão CNPJ MEI", arquivo: `cnpj-${n}.pdf`, verificado: false },
+  { tipo: "Comprovante de residência (frente)", arquivo: `residencia-${n}.jpg`, verificado: false },
+];
 
 export type TipoVeiculo = "furgao" | "van";
 
