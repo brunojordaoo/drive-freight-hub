@@ -131,6 +131,8 @@ function Portal() {
       cidade: form.cidade,
       status: "pendente",
       criado_em: new Date().toISOString().slice(0, 10),
+      documentos: DOCS_PADRAO(form.cpf.replace(/\D/g, "").slice(0, 6) || motoristaId),
+      observacoes_admin: "",
     });
     setPedido({ motoristaId, veiculo: selecionado });
     toast.success("Cadastro enviado para análise!");
