@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   Copy,
   Gauge,
+  Plus,
   Truck,
   Wrench,
 } from "lucide-react";
