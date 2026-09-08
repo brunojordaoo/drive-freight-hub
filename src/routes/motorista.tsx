@@ -80,6 +80,20 @@ function AreaMotorista() {
   const alertaManutencao =
     kmDigitado > 0 && precisaManutencao(kmDigitado, veiculo.km_ultima_revisao);
 
+  function registrarKmDia() {
+    const n = Number(kmDia.replace(/\D/g, ""));
+    if (!n) {
+      toast.error("Informe os km rodados hoje.");
+      return;
+    }
+    // db.from('veiculos').update({ km_atual }).eq('id', ...)
+    db.from("veiculos")
+      .update({ km_atual: veiculo!.km_atual + n })
+      .eq("id", veiculo!.id);
+    setKmDia("");
+    toast.success(`${n.toLocaleString("pt-BR")} km adicionados à rodagem.`);
+  }
+
   function toggleFoto(a: string) {
     setFotos((f) => (f.includes(a) ? f.filter((x) => x !== a) : [...f, a]));
   }
