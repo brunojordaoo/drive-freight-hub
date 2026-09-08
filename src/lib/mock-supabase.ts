@@ -122,6 +122,8 @@ const seed: DbShape = {
       cidade: "Itabuna",
       status: "aprovado",
       criado_em: "2026-06-02",
+      documentos: DOCS_PADRAO("2026-06-02"),
+      observacoes_admin: "",
     },
     {
       id: "mot-2",
@@ -136,6 +138,8 @@ const seed: DbShape = {
       cidade: "Ilhéus",
       status: "em_analise",
       criado_em: "2026-08-29",
+      documentos: DOCS_PADRAO("2026-08-29"),
+      observacoes_admin: "",
     },
     {
       id: "mot-3",
@@ -150,6 +154,8 @@ const seed: DbShape = {
       cidade: "Itabuna",
       status: "pendente",
       criado_em: "2026-09-01",
+      documentos: DOCS_PADRAO("2026-09-01"),
+      observacoes_admin: "",
     },
     {
       id: "mot-4",
@@ -164,6 +170,8 @@ const seed: DbShape = {
       cidade: "Ilhéus",
       status: "pendente",
       criado_em: "2026-09-04",
+      documentos: DOCS_PADRAO("2026-09-04"),
+      observacoes_admin: "",
     },
   ],
   veiculos: [
