@@ -140,16 +140,14 @@ function PainelAdmin() {
                         {m.cidade} · {m.tem_ear ? "EAR" : "sem EAR"}
                       </p>
                       <div className="mt-2 flex flex-wrap gap-1">
-                        {c.status !== "em_analise" && (
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            className="h-7 px-2 text-[11px]"
-                            onClick={() => moverMotorista(m, "em_analise")}
-                          >
-                            Analisar
-                          </Button>
-                        )}
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          className="h-7 px-2 text-[11px]"
+                          onClick={() => abrirAnalise(m)}
+                        >
+                          <FileText className="mr-1 size-3" /> Analisar
+                        </Button>
                         {c.status !== "aprovado" && (
                           <Button
                             size="sm"
