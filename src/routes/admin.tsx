@@ -73,6 +73,16 @@ function PainelAdmin() {
   // db.from('...').select()
   const { motoristas, veiculos, alugueis, pagamentos } = useDb((s) => s);
   const [webhookLog, setWebhookLog] = useState<string[]>([]);
+  const [detalheId, setDetalheId] = useState<string | null>(null);
+
+  const detalhe = motoristas.find((m) => m.id === detalheId) ?? null;
+
+  function abrirAnalise(m: Motorista) {
+    setDetalheId(m.id);
+    if (m.status !== "em_analise" && m.status === "pendente") {
+      db.from("motoristas").update({ status: "em_analise" }).eq("id", m.id);
+    }
+  }
 
   function moverMotorista(m: Motorista, status: StatusMotorista) {
     // db.from('motoristas').update({ status }).eq('id', m.id)
