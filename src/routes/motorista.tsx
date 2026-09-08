@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   Copy,
   Gauge,
+  Plus,
   Truck,
   Wrench,
 } from "lucide-react";
@@ -64,6 +65,7 @@ function AreaMotorista() {
   const ultimaVistoria = minhasVistorias[minhasVistorias.length - 1];
 
   const [km, setKm] = useState("");
+  const [kmDia, setKmDia] = useState("");
   const [obs, setObs] = useState("");
   const [fotos, setFotos] = useState<string[]>([]);
 
@@ -78,6 +80,20 @@ function AreaMotorista() {
   const kmDigitado = Number(km.replace(/\D/g, ""));
   const alertaManutencao =
     kmDigitado > 0 && precisaManutencao(kmDigitado, veiculo.km_ultima_revisao);
+
+  function registrarKmDia() {
+    const n = Number(kmDia.replace(/\D/g, ""));
+    if (!n) {
+      toast.error("Informe os km rodados hoje.");
+      return;
+    }
+    // db.from('veiculos').update({ km_atual }).eq('id', ...)
+    db.from("veiculos")
+      .update({ km_atual: veiculo!.km_atual + n })
+      .eq("id", veiculo!.id);
+    setKmDia("");
+    toast.success(`${n.toLocaleString("pt-BR")} km adicionados à rodagem.`);
+  }
 
   function toggleFoto(a: string) {
     setFotos((f) => (f.includes(a) ? f.filter((x) => x !== a) : [...f, a]));
@@ -194,6 +210,27 @@ function AreaMotorista() {
                   ((veiculo.km_atual - veiculo.km_ultima_revisao) / 10000) * 100,
                 )}
               />
+            </div>
+
+            <div className="space-y-2 rounded-xl border border-border/60 p-3">
+              <Label className="text-[11px] text-muted-foreground">
+                Quilometragem rodada hoje
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  value={kmDia}
+                  inputMode="numeric"
+                  placeholder="Ex.: 120"
+                  onChange={(e) => setKmDia(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                  onKeyDown={(e) => e.key === "Enter" && registrarKmDia()}
+                />
+                <Button variant="secondary" onClick={registrarKmDia}>
+                  <Plus className="mr-1 size-3" /> Somar
+                </Button>
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                Somado ao odômetro e à barra de rodagem até a próxima revisão.
+              </p>
             </div>
 
             <div className="flex items-center gap-2 rounded-xl bg-secondary/60 p-3 text-xs">

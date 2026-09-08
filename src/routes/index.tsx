@@ -25,6 +25,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import {
   db,
+  DOCS_PADRAO,
   brl,
   caucaoDe,
   idadeEm,
@@ -131,6 +132,8 @@ function Portal() {
       cidade: form.cidade,
       status: "pendente",
       criado_em: new Date().toISOString().slice(0, 10),
+      documentos: DOCS_PADRAO(form.cpf.replace(/\D/g, "").slice(0, 6) || motoristaId),
+      observacoes_admin: "",
     });
     setPedido({ motoristaId, veiculo: selecionado });
     toast.success("Cadastro enviado para análise!");
@@ -266,7 +269,7 @@ function Portal() {
               {passo === 2 && (
                 <>
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <Campo label="Nome completo" erro={erros.nome}>
+                    <Campo label="Nome completo" erro={erros['nome']}>
                       <Input
                         value={form.nome}
                         maxLength={100}
@@ -274,7 +277,7 @@ function Portal() {
                         placeholder="Como está na CNH"
                       />
                     </Campo>
-                    <Campo label="E-mail" erro={erros.email}>
+                    <Campo label="E-mail" erro={erros['email']}>
                       <Input
                         value={form.email}
                         maxLength={255}
@@ -282,7 +285,7 @@ function Portal() {
                         placeholder="voce@email.com"
                       />
                     </Campo>
-                    <Campo label="Telefone" erro={erros.telefone}>
+                    <Campo label="Telefone" erro={erros['telefone']}>
                       <Input
                         value={form.telefone}
                         onChange={(e) => set("telefone", maskTel(e.target.value))}
@@ -290,14 +293,14 @@ function Portal() {
                         inputMode="numeric"
                       />
                     </Campo>
-                    <Campo label="Data de nascimento" erro={erros.data_nascimento}>
+                    <Campo label="Data de nascimento" erro={erros['data_nascimento']}>
                       <Input
                         type="date"
                         value={form.data_nascimento}
                         onChange={(e) => set("data_nascimento", e.target.value)}
                       />
                     </Campo>
-                    <Campo label="CPF" erro={erros.cpf}>
+                    <Campo label="CPF" erro={erros['cpf']}>
                       <Input
                         value={form.cpf}
                         onChange={(e) => set("cpf", maskCPF(e.target.value))}
@@ -305,7 +308,7 @@ function Portal() {
                         inputMode="numeric"
                       />
                     </Campo>
-                    <Campo label="CNPJ (MEI)" erro={erros.cnpj}>
+                    <Campo label="CNPJ (MEI)" erro={erros['cnpj']}>
                       <Input
                         value={form.cnpj}
                         onChange={(e) => set("cnpj", maskCNPJ(e.target.value))}
@@ -313,7 +316,7 @@ function Portal() {
                         inputMode="numeric"
                       />
                     </Campo>
-                    <Campo label="Número da CNH" erro={erros.cnh}>
+                    <Campo label="Número da CNH" erro={erros['cnh']}>
                       <Input
                         value={form.cnh}
                         onChange={(e) => set("cnh", e.target.value.replace(/\D/g, "").slice(0, 11))}
@@ -321,7 +324,7 @@ function Portal() {
                         inputMode="numeric"
                       />
                     </Campo>
-                    <Campo label="Cidade" erro={erros.cidade}>
+                    <Campo label="Cidade" erro={erros['cidade']}>
                       <Input
                         value={form.cidade}
                         maxLength={60}
@@ -336,8 +339,8 @@ function Portal() {
                       <p className="text-xs text-muted-foreground">
                         Exigência legal para atividade remunerada. Sem EAR não é possível alugar.
                       </p>
-                      {erros.tem_ear && (
-                        <p className="mt-1 text-xs text-destructive">{erros.tem_ear}</p>
+                      {erros['tem_ear'] && (
+                        <p className="mt-1 text-xs text-destructive">{erros['tem_ear']}</p>
                       )}
                     </div>
                     <Switch
@@ -370,9 +373,9 @@ function Portal() {
                       <span className="block text-xs text-muted-foreground">
                         Conta de luz, água ou telefone recente em seu nome.
                       </span>
-                      {erros.comprovante_residencia && (
+                      {erros['comprovante_residencia'] && (
                         <span className="mt-1 block text-xs text-destructive">
-                          {erros.comprovante_residencia}
+                          {erros['comprovante_residencia']}
                         </span>
                       )}
                     </span>
