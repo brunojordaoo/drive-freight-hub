@@ -8,3 +8,5 @@
 - [x] Admin: kanban de aprovação, tabela de frota com fundo de depreciação (km*0.20), botão disparar bloqueio + log JSON do webhook
 - [x] Precificação: furgão R$ 800/sem + caução R$ 1.700 · van R$ 1.000/sem + caução R$ 2.500
 - [x] Aurora verde animada vagando pela tela
+- [x] Motorista: registro de quilometragem diária somando na barra de rodagem até a revisão
+- [x] Admin: coluna Locatário na frota + ficha do motorista (dados, conferência de documentos, observações internas)
