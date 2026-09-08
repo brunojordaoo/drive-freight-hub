@@ -211,6 +211,27 @@ function AreaMotorista() {
               />
             </div>
 
+            <div className="space-y-2 rounded-xl border border-border/60 p-3">
+              <Label className="text-[11px] text-muted-foreground">
+                Quilometragem rodada hoje
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  value={kmDia}
+                  inputMode="numeric"
+                  placeholder="Ex.: 120"
+                  onChange={(e) => setKmDia(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                  onKeyDown={(e) => e.key === "Enter" && registrarKmDia()}
+                />
+                <Button variant="secondary" onClick={registrarKmDia}>
+                  <Plus className="mr-1 size-3" /> Somar
+                </Button>
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                Somado ao odômetro e à barra de rodagem até a próxima revisão.
+              </p>
+            </div>
+
             <div className="flex items-center gap-2 rounded-xl bg-secondary/60 p-3 text-xs">
               <CalendarClock className="size-4 text-primary" />
               Próxima vistoria: <strong>{dataBR(proximaVistoria)}</strong>
