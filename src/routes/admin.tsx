@@ -199,13 +199,37 @@ function PainelAdmin() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {veiculos.map((v) => (
+              {veiculos.map((v) => {
+                const aluguelDoVeiculo = alugueis.find(
+                  (a) => a.veiculo_id === v.id && a.status === "ativo",
+                );
+                const locatario = motoristas.find(
+                  (m) => m.id === aluguelDoVeiculo?.motorista_id,
+                );
+                return (
                 <TableRow key={v.id}>
                   <TableCell>
                     <p className="font-medium">{v.modelo}</p>
                     <p className="text-[11px] text-muted-foreground">
                       {v.placa} · {v.ano}
                     </p>
+                  </TableCell>
+                  <TableCell>
+                    {locatario ? (
+                      <div className="space-y-1">
+                        <p className="text-xs font-medium">{locatario.nome}</p>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          className="h-6 px-2 text-[10px]"
+                          onClick={() => setDetalheId(locatario.id)}
+                        >
+                          <FileText className="mr-1 size-3" /> Documentos e observações
+                        </Button>
+                      </div>
+                    ) : (
+                      <span className="text-[11px] text-muted-foreground">Sem locatário</span>
+                    )}
                   </TableCell>
                   <TableCell className="text-xs">
                     {v.tipo === "furgao" ? "Furgão" : "Van"}
