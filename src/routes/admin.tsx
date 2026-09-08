@@ -337,7 +337,131 @@ function PainelAdmin() {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={!!detalhe} onOpenChange={(o) => !o && setDetalheId(null)}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
+          {detalhe && (
+            <FichaMotorista
+              m={detalhe}
+              onStatus={(s) => moverMotorista(detalhe, s)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </main>
+  );
+}
+
+function FichaMotorista({
+  m,
+  onStatus,
+}: {
+  m: Motorista;
+  onStatus: (s: StatusMotorista) => void;
+}) {
+  const [obs, setObs] = useState(m.observacoes_admin);
+
+  useEffect(() => setObs(m.observacoes_admin), [m.id, m.observacoes_admin]);
+
+  function alternarDoc(tipo: string) {
+    // db.from('motoristas').update({ documentos }).eq('id', m.id)
+    db.from("motoristas")
+      .update({
+        documentos: m.documentos.map((d) =>
+          d.tipo === tipo ? { ...d, verificado: !d.verificado } : d,
+        ),
+      })
+      .eq("id", m.id);
+  }
+
+  function salvarObs() {
+    // db.from('motoristas').update({ observacoes_admin }).eq('id', m.id)
+    db.from("motoristas").update({ observacoes_admin: obs.trim() }).eq("id", m.id);
+    toast.success("Observações salvas.");
+  }
+
+  return (
+    <>
+      <DialogHeader>
+        <DialogTitle className="flex items-center gap-2 text-base">
+          <UserRound className="size-4 text-primary" /> {m.nome}
+        </DialogTitle>
+        <DialogDescription>
+          Cadastro enviado em {dataBR(m.criado_em)} · {rotuloStatus(m.status)}
+        </DialogDescription>
+      </DialogHeader>
+
+      <div className="grid grid-cols-2 gap-2 text-xs">
+        <Dado rot="CPF" val={m.cpf} />
+        <Dado rot="CNPJ MEI" val={m.cnpj} />
+        <Dado rot="Telefone" val={m.telefone} />
+        <Dado rot="E-mail" val={m.email} />
+        <Dado rot="Nascimento" val={dataBR(m.data_nascimento)} />
+        <Dado rot="CNH" val={m.cnh} />
+        <Dado rot="Cidade" val={m.cidade} />
+        <Dado rot="EAR" val={m.tem_ear ? "Sim" : "Não"} />
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-xs font-medium text-muted-foreground">Documentos enviados</p>
+        {m.documentos.map((d) => (
+          <div
+            key={d.tipo}
+            className="flex items-center justify-between gap-3 rounded-xl border border-border/60 p-3"
+          >
+            <div className="min-w-0">
+              <p className="truncate text-xs font-medium">{d.tipo}</p>
+              <p className="truncate text-[11px] text-muted-foreground">{d.arquivo}</p>
+            </div>
+            <Button
+              size="sm"
+              variant={d.verificado ? "default" : "secondary"}
+              className="h-7 shrink-0 px-2 text-[11px]"
+              onClick={() => alternarDoc(d.tipo)}
+            >
+              {d.verificado ? (
+                <>
+                  <CheckCircle2 className="mr-1 size-3" /> Conferido
+                </>
+              ) : (
+                "Conferir"
+              )}
+            </Button>
+          </div>
+        ))}
+      </div>
+
+      <div className="space-y-2">
+        <Label className="text-xs text-muted-foreground">Observações internas</Label>
+        <Textarea
+          value={obs}
+          maxLength={600}
+          placeholder="Ex.: comprovante de residência ilegível, reenviar."
+          onChange={(e) => setObs(e.target.value)}
+        />
+        <Button size="sm" variant="secondary" onClick={salvarObs}>
+          Salvar observações
+        </Button>
+      </div>
+
+      <div className="flex flex-wrap gap-2 border-t border-border/60 pt-3">
+        <Button size="sm" onClick={() => onStatus("aprovado")}>
+          <CheckCircle2 className="mr-1 size-3" /> Aprovar
+        </Button>
+        <Button size="sm" variant="destructive" onClick={() => onStatus("reprovado")}>
+          <Ban className="mr-1 size-3" /> Reprovar
+        </Button>
+      </div>
+    </>
+  );
+}
+
+function Dado({ rot, val }: { rot: string; val: string }) {
+  return (
+    <div className="rounded-xl bg-secondary/50 p-2">
+      <p className="text-[10px] text-muted-foreground">{rot}</p>
+      <p className="truncate font-medium">{val}</p>
+    </div>
   );
 }
 
